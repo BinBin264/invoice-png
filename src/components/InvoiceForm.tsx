@@ -183,7 +183,7 @@ export function InvoiceForm({ form, onChange, onReset, errors }: InvoiceFormProp
               <button
                 type="button"
                 onClick={addPoint}
-                className="mt-3 text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-2 transition hover:text-teal-900"
+                className="mt-3 inline-flex min-h-[44px] items-center text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-2 transition hover:text-teal-900 active:text-teal-950"
               >
                 + Thêm ý
               </button>

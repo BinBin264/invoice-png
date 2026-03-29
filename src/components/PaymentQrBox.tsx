@@ -29,6 +29,7 @@ export function PaymentQrBox({ show }: PaymentQrBoxProps) {
             <img
               src={PAYMENT_QR_IMAGE_SRC}
               alt=""
+              crossOrigin="anonymous"
               className="h-auto w-full max-w-[215px] rounded-md object-contain"
               draggable={false}
             />

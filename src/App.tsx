@@ -5,10 +5,15 @@ import { getDefaultFormData } from './data/defaultForm';
 import type { InvoiceFormData } from './types/invoice';
 import { computeInvoice } from './utils/computeInvoice';
 import { exportPngFromElement } from './utils/exportCapture';
+import {
+  clearFormStorage,
+  loadFormFromStorage,
+  saveFormToStorage,
+} from './utils/formStorage';
 import { validateInvoiceForm } from './utils/validation';
 
 export default function App() {
-  const [form, setForm] = useState<InvoiceFormData>(() => getDefaultFormData());
+  const [form, setForm] = useState<InvoiceFormData>(() => loadFormFromStorage() ?? getDefaultFormData());
   const [previewOpen, setPreviewOpen] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -16,6 +21,11 @@ export default function App() {
 
   const computed = useMemo(() => computeInvoice(form), [form]);
   const validation = useMemo(() => validateInvoiceForm(form), [form]);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => saveFormToStorage(form), 350);
+    return () => window.clearTimeout(t);
+  }, [form]);
 
   useEffect(() => {
     if (!previewOpen) return;
@@ -36,6 +46,7 @@ export default function App() {
   }, [previewOpen]);
 
   const handleReset = useCallback(() => {
+    clearFormStorage();
     setForm(getDefaultFormData());
     setExportError(null);
   }, []);
@@ -65,7 +76,7 @@ export default function App() {
 
   return (
     <div className="min-h-[100dvh] pt-[max(1.25rem,env(safe-area-inset-top,0px))]">
-      <div className="mx-auto max-w-2xl px-4 pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-10">
+      <div className="relative z-10 mx-auto max-w-2xl px-4 pb-[calc(6.75rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-[calc(6.75rem+env(safe-area-inset-bottom,0px))]">
         <header className="mb-6 text-center sm:mb-8">
           <div className="mb-3 flex items-center justify-center gap-2.5">
             <span
@@ -102,7 +113,7 @@ export default function App() {
         className={
           previewOpen
             ? 'fixed inset-0 z-50 flex flex-col bg-stone-900/55 backdrop-blur-[2px]'
-            : 'fixed left-[-9999px] top-0 z-0 w-[min(28rem,100vw)]'
+            : 'pointer-events-none fixed left-[-9999px] top-0 z-0 w-[min(28rem,100vw)]'
         }
         onClick={previewOpen ? () => setPreviewOpen(false) : undefined}
       >
