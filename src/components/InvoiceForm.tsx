@@ -1,7 +1,10 @@
 import type { ReactNode } from 'react';
+import { useCallback, useState } from 'react';
 import { MONTH_OPTIONS } from '../constants/months';
+import { PAYMENT_QR_PASSWORD } from '../constants/paymentQr';
 import type { InvoiceFormData } from '../types/invoice';
-import { parseAttendanceDates } from '../utils/parseDates';
+import { AttendanceDatesField } from './AttendanceDatesField';
+import { PaymentQrPasswordModal } from './PaymentQrPasswordModal';
 
 interface InvoiceFormProps {
   form: InvoiceFormData;
@@ -13,6 +16,9 @@ interface InvoiceFormProps {
 export function InvoiceForm({ form, onChange, onReset, errors }: InvoiceFormProps) {
   const set = (patch: Partial<InvoiceFormData>) => onChange({ ...form, ...patch });
   const monthValue = MONTH_OPTIONS.includes(form.month) ? form.month : MONTH_OPTIONS[0];
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [qrPasswordError, setQrPasswordError] = useState<string | null>(null);
+  const clearQrError = useCallback(() => setQrPasswordError(null), []);
 
   const setPoint = (index: number, value: string) => {
     const next = [...form.remarkPoints];
@@ -30,6 +36,27 @@ export function InvoiceForm({ form, onChange, onReset, errors }: InvoiceFormProp
     set({
       remarkPoints: form.remarkPoints.filter((_, i) => i !== index),
     });
+  };
+
+  const handlePaymentQrToggle = (wantOn: boolean) => {
+    if (!wantOn) {
+      set({ showPaymentQr: false });
+      setQrModalOpen(false);
+      setQrPasswordError(null);
+      return;
+    }
+    setQrPasswordError(null);
+    setQrModalOpen(true);
+  };
+
+  const handleQrPasswordSubmit = (password: string) => {
+    if (password !== PAYMENT_QR_PASSWORD) {
+      setQrPasswordError('Sai mật khẩu. Thử lại.');
+      return;
+    }
+    set({ showPaymentQr: true });
+    setQrModalOpen(false);
+    setQrPasswordError(null);
   };
 
   return (
@@ -110,39 +137,22 @@ export function InvoiceForm({ form, onChange, onReset, errors }: InvoiceFormProp
             onChange={(e) => set({ sessionCount: Math.max(1, parseInt(e.target.value, 10) || 1) })}
           />
         </Field>
-        <Field label="Danh sách ngày đi học" className="sm:col-span-2">
-          <textarea
-            className="input min-h-[120px] resize-y font-mono text-sm"
-            value={form.attendanceDates.join('\n')}
-            onChange={(e) => set({ attendanceDates: parseAttendanceDates(e.target.value) })}
-            placeholder={'Mỗi dòng một ngày, hoặc cách nhau bởi dấu phẩy\nVD: 08/01'}
+        <div className="sm:col-span-2">
+          <AttendanceDatesField
+            dates={form.attendanceDates}
+            onChange={(attendanceDates) => set({ attendanceDates })}
           />
-          <p className="mt-1 text-xs text-stone-500">Mỗi dòng một ngày (hoặc dùng dấu phẩy).</p>
-        </Field>
+        </div>
 
         <div className="sm:col-span-2">
           <div className="rounded-xl border border-teal-100 bg-gradient-to-b from-teal-50/40 to-stone-50/30 p-4 ring-1 ring-teal-100/60 sm:p-5">
             <p className="text-base font-semibold text-stone-900">Nhận xét</p>
             <p className="mt-1 text-xs text-stone-500">
-              Viết chủ đề một đoạn; các ý bên dưới — phiếu in sẽ format đẹp, không cần gõ gạch đầu dòng.
+              Mỗi ô là một ý — trên phiếu tự thêm gạch đầu dòng.
             </p>
 
             <div className="mt-4">
-              <label className="block">
-                <span className="mb-1.5 block text-sm font-medium text-stone-700">
-                  Chủ đề / tổng quan
-                </span>
-                <textarea
-                  className="input min-h-[88px] resize-y"
-                  value={form.remarkTopic}
-                  onChange={(e) => set({ remarkTopic: e.target.value })}
-                  placeholder='VD: Con học về chủ đề "Body Parts".'
-                />
-              </label>
-            </div>
-
-            <div className="mt-5">
-              <span className="text-sm font-medium text-stone-700">Chi tiết từng ý</span>
+              <span className="text-sm font-medium text-stone-700">Từng ý nhận xét</span>
               <div className="mt-2 space-y-2">
                 {form.remarkPoints.map((line, i) => (
                   <div key={i} className="flex gap-2">
@@ -180,7 +190,42 @@ export function InvoiceForm({ form, onChange, onReset, errors }: InvoiceFormProp
             </div>
           </div>
         </div>
+
+        <div className="sm:col-span-2">
+          <div className="flex items-center justify-between gap-4 rounded-xl border border-emerald-100 bg-gradient-to-r from-emerald-50/60 to-white px-4 py-3 ring-1 ring-emerald-100/70">
+            <div>
+              <p className="text-sm font-semibold text-stone-900">Hiện mã QR thanh toán</p>
+              <p className="mt-0.5 text-xs text-stone-500">Hiện dưới nhận xét trên phiếu. Bật cần mật khẩu.</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.showPaymentQr}
+              onClick={() => handlePaymentQrToggle(!form.showPaymentQr)}
+              className={`relative h-8 w-14 shrink-0 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                form.showPaymentQr ? 'bg-teal-600' : 'bg-stone-300'
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 left-0.5 h-7 w-7 rounded-full bg-white shadow transition-transform ${
+                  form.showPaymentQr ? 'translate-x-6' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
       </div>
+
+      <PaymentQrPasswordModal
+        open={qrModalOpen}
+        error={qrPasswordError}
+        onClose={() => {
+          setQrModalOpen(false);
+          setQrPasswordError(null);
+        }}
+        onSubmit={handleQrPasswordSubmit}
+        onClearError={clearQrError}
+      />
     </div>
   );
 }

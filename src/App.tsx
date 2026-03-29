@@ -67,7 +67,19 @@ export default function App() {
     <div className="min-h-[100dvh] pt-[max(1.25rem,env(safe-area-inset-top,0px))]">
       <div className="mx-auto max-w-2xl px-4 pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-10">
         <header className="mb-6 text-center sm:mb-8">
-          <h1 className="text-2xl font-bold text-stone-900 sm:text-3xl">Phiếu học phí</h1>
+          <div className="mb-3 flex items-center justify-center gap-2.5">
+            <span
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-600 shadow-sm ring-1 ring-teal-700/20"
+              aria-hidden
+            >
+              <svg className="h-6 w-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="9" y="8" width="6" height="15" rx="1" fill="#ffffff" />
+                <rect x="17" y="8" width="6" height="15" rx="1" fill="#ccfbf1" />
+                <rect x="15" y="8" width="2" height="15" fill="#99f6e4" />
+              </svg>
+            </span>
+            <h1 className="text-2xl font-bold text-stone-900 sm:text-3xl">Phiếu học phí</h1>
+          </div>
           <p className="mt-2 text-pretty text-sm text-stone-600">
             Điền form bên dưới — bấm <span className="font-medium text-teal-800">Xem trước</span> để xem phiếu,
             xuất PNG ở thanh dưới.

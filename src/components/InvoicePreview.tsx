@@ -2,6 +2,7 @@ import { forwardRef, type ReactNode } from 'react';
 import type { InvoiceComputedData, InvoiceFormData } from '../types/invoice';
 import { formatVnd } from '../utils/format';
 import { DateBadges } from './DateBadges';
+import { PaymentQrBox } from './PaymentQrBox';
 import { RemarkBox } from './RemarkBox';
 import { SummaryBox } from './SummaryBox';
 
@@ -87,7 +88,9 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <DateBadges dates={form.attendanceDates} />
               </div>
 
-              <RemarkBox topic={form.remarkTopic} points={form.remarkPoints} />
+              <RemarkBox points={form.remarkPoints} />
+
+              <PaymentQrBox show={form.showPaymentQr} />
             </div>
           </div>
         </div>

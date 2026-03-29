@@ -10,10 +10,10 @@ export interface InvoiceFormData {
   sessionCount: number;
   /** Danh sách ngày đi học (chuỗi hiển thị) */
   attendanceDates: string[];
-  /** Đoạn mở đầu nhận xét (chủ đề / tổng quan) */
-  remarkTopic: string;
-  /** Từng ý chi tiết — trên phiếu hiển thị dạng gạch đầu dòng, không cần gõ "-" */
+  /** Từng ý nhận xét — phiếu hiển thị dạng gạch đầu dòng */
   remarkPoints: string[];
+  /** Hiện mã QR thanh toán trên phiếu (bật sau khi nhập đúng mật khẩu) */
+  showPaymentQr: boolean;
 }
 
 /** Kết quả tính toán từ form */
