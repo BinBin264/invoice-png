@@ -1,0 +1,46 @@
+interface RemarkBoxProps {
+  topic: string;
+  points: string[];
+}
+
+export function RemarkBox({ topic, points }: RemarkBoxProps) {
+  const t = topic.trim();
+  const list = points.map((p) => p.trim()).filter(Boolean);
+
+  const shell =
+    'rounded-xl border-2 border-amber-200/90 bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50/90 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.85)] ring-1 ring-amber-900/5';
+
+  if (!t && list.length === 0) {
+    return (
+      <div className={shell}>
+        <p className="text-center text-[11px] font-bold tracking-[0.2em] text-amber-900/80">
+          NHẬN XÉT
+        </p>
+        <p className="mt-3 text-center text-sm text-stone-400">—</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={shell}>
+      <p className="text-center text-[11px] font-bold tracking-[0.2em] text-amber-900/80">
+        NHẬN XÉT
+      </p>
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-stone-800">
+        {t && <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{t}</p>}
+        {list.length > 0 && (
+          <ul className="space-y-2.5 border-t border-amber-200/50 pt-3 pl-0.5">
+            {list.map((line, i) => (
+              <li key={i} className="flex gap-2.5">
+                <span className="mt-0.5 shrink-0 font-semibold text-teal-700" aria-hidden>
+                  –
+                </span>
+                <span className="min-w-0 flex-1 leading-relaxed">{line}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
