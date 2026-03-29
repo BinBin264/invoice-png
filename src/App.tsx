@@ -11,6 +11,7 @@ import {
   saveFormToStorage,
 } from './utils/formStorage';
 import { validateInvoiceForm } from './utils/validation';
+import { BRAND_CLASS_NAME } from './constants/branding';
 
 export default function App() {
   const [form, setForm] = useState<InvoiceFormData>(() => loadFormFromStorage() ?? getDefaultFormData());
@@ -77,24 +78,37 @@ export default function App() {
   return (
     <div className="min-h-[100dvh] pt-[max(1.25rem,env(safe-area-inset-top,0px))]">
       <div className="relative z-10 mx-auto max-w-2xl px-4 pb-[calc(6.75rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-[calc(6.75rem+env(safe-area-inset-bottom,0px))]">
-        <header className="mb-6 text-center sm:mb-8">
-          <div className="mb-3 flex items-center justify-center gap-2.5">
-            <span
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-600 shadow-sm ring-1 ring-teal-700/20"
-              aria-hidden
-            >
-              <svg className="h-6 w-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="9" y="8" width="6" height="15" rx="1" fill="#ffffff" />
-                <rect x="17" y="8" width="6" height="15" rx="1" fill="#ccfbf1" />
-                <rect x="15" y="8" width="2" height="15" fill="#99f6e4" />
-              </svg>
-            </span>
-            <h1 className="text-2xl font-bold text-stone-900 sm:text-3xl">Phiếu học phí</h1>
+        <header className="mb-5 sm:mb-7">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f766e] via-[#0d9488] to-[#115e59] px-4 py-5 text-center text-white shadow-[0_10px_32px_-14px_rgba(15,118,110,0.4)] ring-1 ring-white/10 sm:px-6 sm:py-6">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.14]"
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle at 20% 0%, white 0%, transparent 45%), radial-gradient(circle at 80% 100%, white 0%, transparent 40%)',
+              }}
+            />
+            <div className="relative">
+              <h1 className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:gap-x-2.5">
+                <span className="shrink-0 select-none text-[clamp(1.2rem,4.5vw,1.65rem)] leading-none" aria-hidden>
+                  🌈
+                </span>
+                <span className="max-w-[min(100%,18ch)] text-balance text-center text-[clamp(1.05rem,3.8vw,1.35rem)] font-bold leading-snug tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)] sm:max-w-none">
+                  {BRAND_CLASS_NAME}
+                </span>
+                <span className="shrink-0 select-none text-[clamp(1.2rem,4.5vw,1.65rem)] leading-none" aria-hidden>
+                  🌈
+                </span>
+              </h1>
+              <div className="mx-auto mt-3 h-px w-14 bg-white/40" aria-hidden />
+              <p className="mt-3 text-base font-bold tracking-tight text-white drop-shadow-sm sm:text-lg">
+                Phiếu học phí
+              </p>
+              <p className="mx-auto mt-2 max-w-md text-pretty text-xs leading-relaxed text-teal-100/95 sm:text-sm">
+                Điền form bên dưới — bấm <span className="font-semibold text-white">Xem trước</span> để xem phiếu,
+                xuất PNG ở thanh dưới.
+              </p>
+            </div>
           </div>
-          <p className="mt-2 text-pretty text-sm text-stone-600">
-            Điền form bên dưới — bấm <span className="font-medium text-teal-800">Xem trước</span> để xem phiếu,
-            xuất PNG ở thanh dưới.
-          </p>
         </header>
 
         <InvoiceForm

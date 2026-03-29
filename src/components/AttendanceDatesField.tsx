@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { dateChipClassName } from '../constants/branding';
 import { sortDdMmStrings } from '../utils/attendanceDates';
-import { parseAttendanceDates } from '../utils/parseDates';
 
 function pad2(n: number) {
   return String(n).padStart(2, '0');
@@ -68,13 +68,13 @@ export function AttendanceDatesField({ dates, onChange }: AttendanceDatesFieldPr
           {dates.map((d, i) => (
             <span
               key={`${d}-${i}`}
-              className="inline-flex items-center gap-1 rounded-lg border border-teal-200 bg-white px-2 py-1 text-sm font-semibold tabular-nums text-teal-900 shadow-sm"
+              className={`${dateChipClassName} gap-0.5 py-1 pl-3 pr-1`}
             >
-              {d}
+              <span className="tabular-nums">{d}</span>
               <button
                 type="button"
                 onClick={() => removeAt(i)}
-                className="ml-0.5 flex h-7 w-7 items-center justify-center rounded-md text-stone-500 transition hover:bg-red-50 hover:text-red-700"
+                className="flex h-7 min-w-[1.75rem] items-center justify-center rounded-lg text-stone-500 transition hover:bg-teal-200/60 hover:text-red-700"
                 aria-label={`Xóa ngày ${d}`}
               >
                 ×
@@ -83,19 +83,6 @@ export function AttendanceDatesField({ dates, onChange }: AttendanceDatesFieldPr
           ))}
         </div>
       )}
-
-      <label className="mt-4 block">
-        <span className="mb-1 block text-xs font-medium text-stone-600">Nhập hoặc dán danh sách</span>
-        <textarea
-          className="input min-h-[120px] resize-y font-mono text-sm"
-          value={dates.join('\n')}
-          onChange={(e) => onChange(parseAttendanceDates(e.target.value))}
-          placeholder={'Mỗi dòng một ngày, hoặc cách nhau bởi dấu phẩy\nVD: 08/01'}
-        />
-      </label>
-      <p className="mt-1 text-xs text-stone-500">
-        Có thể thêm không giới hạn ngày — mỗi dòng một ngày (hoặc dùng dấu phẩy).
-      </p>
     </div>
   );
 }

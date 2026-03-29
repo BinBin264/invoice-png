@@ -40,7 +40,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         {/* Khung ngoài: nền gradient nhẹ + viền sáng — PNG xuất ra có “khung” đẹp */}
         <div className="rounded-[1.25rem] bg-gradient-to-br from-teal-100/90 via-violet-50/40 to-stone-100 p-[10px] shadow-[0_20px_50px_-12px_rgba(15,118,110,0.28)] ring-1 ring-teal-900/5">
           <div className="overflow-hidden rounded-2xl border border-white/90 bg-white shadow-inner shadow-stone-200/40 ring-1 ring-black/[0.03]">
-            <header className="relative bg-gradient-to-br from-[#0f766e] via-[#0d9488] to-[#115e59] px-5 pb-9 pt-8 text-center text-white">
+            <header className="relative bg-gradient-to-br from-[#0f766e] via-[#0d9488] to-[#115e59] px-5 pb-8 pt-7 text-center text-white">
               <div
                 className="pointer-events-none absolute inset-0 opacity-[0.12]"
                 style={{
@@ -49,14 +49,22 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 }}
               />
               <div className="relative">
-                <p className="text-[13px] font-semibold leading-snug tracking-wide text-white/95 drop-shadow-sm">
-                  {form.className}
-                </p>
-                <div className="mx-auto mt-4 h-px w-12 bg-white/35" aria-hidden />
-                <h1 className="mt-4 text-[26px] font-bold leading-tight tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)] sm:text-[1.75rem]">
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-0.5 sm:gap-x-2.5">
+                  <span className="shrink-0 text-lg leading-none sm:text-xl" aria-hidden>
+                    🌈
+                  </span>
+                  <p className="max-w-[16rem] text-balance text-center text-[0.8125rem] font-semibold leading-snug tracking-wide text-white/95 drop-shadow-sm sm:max-w-none sm:text-[0.875rem]">
+                    {form.className}
+                  </p>
+                  <span className="shrink-0 text-lg leading-none sm:text-xl" aria-hidden>
+                    🌈
+                  </span>
+                </div>
+                <div className="mx-auto mt-3 h-px w-12 bg-white/35 sm:mt-4" aria-hidden />
+                <h1 className="mt-3 text-[22px] font-bold leading-tight tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)] sm:mt-4 sm:text-[1.65rem]">
                   PHIẾU HỌC PHÍ
                 </h1>
-                <p className="mt-3 text-sm font-medium text-teal-100/95">{form.month}</p>
+                <p className="mt-2.5 text-sm font-medium text-teal-100/95">{form.month}</p>
               </div>
             </header>
 
